@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>snake</title>
+    <link rel="stylesheet" href="css..css">
+</head>
+<body onload="docReady()" id="begin" >
+<div >
+    <table cellspacing="5" cellpadding="5" id="khunggame">
+        <h1><center>LOOKING FOR LOVER !</center></h1>
+        <tr >
+            <td id="canvasne">
+                    <canvas id="myCanvas" width="950px" height="768px" style=" border:10px solid pink"></canvas>
+                </td>
+            <td>
+                <form id='crushID'></form>
+                <h2>bấm<button class="button" onclick="playgame()">Space</button>để bắt đầu</h2>
+                <h2>bấm<button class="button" onclick="reset1()">Ctrl</button>để resset</h2>
+                <h1>Crush của bạn có màu: </h1>
+                <input type="text" class="khungchu" value="" disabled id="goiy" >
+                <h1>Score:</h1>
+                <input class="khung" type="text" disabled id="score" /><br>
+            </td>
+
+
+            <td id="anhcrush"></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+<script>
+    let timeID = 0;
+    var diemso = 0;
+    var countSpace = 0;
+    function CircleHead(pos1,pos2,rad) { //class circle
+
+        this.pos1 = pos1;//ngang
+        this.pos2 = pos2;//dọc
+        this.rad= rad;
+        this.dx = 2;
+        this.dy = 0;
+
+        this.printfCircle = function () {   //method circle
+            let  ctx = document.getElementById("myCanvas").getContext("2d");
+            ctx.clearRect(0,0,1368,768);
+            ctx.beginPath();
+            ctx.arc(this.pos1,this.pos2,this.rad,0,2*Math.PI);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+            ctx.stroke();
+            ctx.strokeStyle ='white';
+            ctx.closePath();
+        }
+
+        this.moveSnake = function (item) {     //method move
+            this.pos1 = this.pos1 + this.dx;
+            this.pos2 = this.pos2 + this.dy;
+            if (this.pos1-this.rad <= 0 || this.pos2-this.rad <= 0 || this.pos1 +this.rad >=950 || this.pos2 + this.rad >=768){
+                document.getElementById('anhcrush').innerHTML ="<h1>Thua rồi nhé :D </h1><br><h1>Crush của bạn nè:   </h1>"+"<img src=\"tranducboo.png\" height=\"750\" width=\"600\"/><br><h4>giới thiệu nhân vật trong ảnh:</h4><br><h4>TRẦN ĐỨC BO</h4><br><h4>GIỚI TÍNH: Pê đe</h4><br><h4>GOOGLE SEARCH ĐỂ LẤY INFOR</h4>";
+                clearInterval(timeID);
+
+            }
+            if(this.accident(item)){
+                    document.getElementById('anhcrush').innerHTML = '<img src="ngoctrinh'+ Math.floor(Math.random()*5)+ '.png" height="872" width="600"/>';
+            }
+        }
+        this.accident = function (item) { //phương thức va chạm  ---- item là giá trị truyền vào
+            let x = item.toaDo1 + 20;
+            let y = item.toaDo2 + 20;
+            if (Math.abs(this.pos1- x) < 1/2*(this.rad+50) && Math.abs(this.pos2 - y) < 1/2*(this.rad+50)){
+                item.toaDo1 = item.toaDo1+Math.random()*1000-200;
+                item.toaDo2 = item.toaDo2+Math.random()*1000 -200;
+                diemso++;
+                squaree.randomPosi();
+                if (ranDomC == 'red'){
+                    document.getElementById('goiy').value = 'ĐỎ';
+                }
+                if (ranDomC== 'orange'){
+                    document.getElementById('goiy').value = 'DA CAM';
+                }
+                if (ranDomC == 'yellow' ){
+                    document.getElementById('goiy').value = 'VÀNG';
+                }
+                if (ranDomC== 'green'){
+                    document.getElementById('goiy').value = 'XANH LÁ CÂY';
+                }
+                if (ranDomC ==  'blue'){
+                    document.getElementById('goiy').value = 'XANH DƯƠNG';
+                }
+                if (ranDomC == 'violet'){
+                    document.getElementById('goiy').value = 'TÍM';
+                }
+                squaree1.randomPosi();
+                squaree2.randomPosi();
+                squaree3.randomPosi();
+                squaree4.randomPosi();
+                squaree5.randomPosi();
+                return true
+            }else
+                return false;
+        }
+
+
+    }
+
+    var Pos1 = 90;
+    var Pos2 = 40;
+    let circlehead =new CircleHead(Pos1,Pos2,20);  // khởi tạo đối tượng hình tròn
+    function moveclick(evt) {
+        switch (evt.keyCode) {
+            case 37:
+                moveleftCircle();
+                break;
+            case 39:
+                moverightCircle();
+                break;
+            case 38:
+                moveupCircle();
+                break;
+            case 40:
+                movedownCircle();
+                break;
+            case  32:
+                playgame();
+                countSpace++;
+                break;
+            case 17:
+                reset1();
+                break;
+        }
+    }
+
+    circlehead.printfCircle();
+    function automove() {
+           circlehead.printfCircle();            // di chuyển hình tròn
+           circlehead.moveSnake(squaree);
+           squaree.SquareOnTable();
+           squaree1.SquareOnTable();
+           squaree2.SquareOnTable();
+           squaree3.SquareOnTable();
+           squaree4.SquareOnTable();
+           squaree5.SquareOnTable();
+           squaree6.SquareOnTable();
+           document.getElementById('score').value = diemso;
+   }
+
+    // di chuyển theo hướng
+    function moveleftCircle(){
+        circlehead.dx= -2;
+        circlehead.dy=0;
+    }
+    function moverightCircle(){
+        circlehead.dx= +2;
+        circlehead.dy=0;
+    }
+    function moveupCircle (){
+        circlehead.dx= 0;
+        circlehead.dy= -2;
+    }
+    function movedownCircle (){
+        circlehead.dx= 0;
+        circlehead.dy= +2;
+    }
+    // circlehead.printfCircle();
+    function docReady() {
+        window.addEventListener('keydown',moveclick);
+    }
+
+    var ranDomC ='';
+    function Squaree(canhA,toado1,toado2) {             // class hình vuông
+        this.CanhA = canhA;
+        this.toaDo1 = toado1;
+        this.toaDo2 = toado2;
+        var colorArr = ['red', 'orange', 'yellow', 'green', 'blue', 'violet','Cyan'];
+        this.color = colorArr[Math.floor(Math.random() * 6)];
+        ranDomC = this.color;
+        this.SquareOnTable = function () {
+            let ctx = document.getElementById("myCanvas").getContext("2d");
+            ctx.beginPath();
+            ctx.rect(this.toaDo1, this.toaDo2, this.CanhA, this.CanhA);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            if (this.toaDo1 <= 110) {
+                this.toaDo1 = 100;
+            }
+            if (this.toaDo1 >= 1300) {
+                this.toaDo1 = 100;
+            }
+            if (this.toaDo2 <= 100) {
+                this.toaDo2 = 100;
+            }
+            if (this.toaDo2 >= 700) {
+                this.toaDo2 = 100;
+            }
+            this.randomPosi = function () {
+                this.toaDo1 = Math.random() * 600;
+                this.toaDo2 = Math.random() * 600;
+                this.color = colorArr[Math.floor(Math.random() * 6)];
+                ranDomC = this.color;
+
+            }
+        }
+    }
+    function changeColorr(){        // hàm đổi màu
+        if (ranDomC == 'red'){
+            document.getElementById('goiy').value = 'ĐỎ';
+        }
+        if (ranDomC== 'orange'){
+            document.getElementById('goiy').value = 'DA CAM';
+        }
+        if (ranDomC == 'yellow' ){
+            document.getElementById('goiy').value = 'VÀNG';
+        }
+        if (ranDomC== 'green'){
+            document.getElementById('goiy').value = 'XANH LÁ CÂY';
+        }
+        if (ranDomC ==  'blue'){
+            document.getElementById('goiy').value = 'XANH DƯƠNG';
+        }
+        if (ranDomC == 'violet'){
+            document.getElementById('goiy').value = 'TÍM';
+        }
+        if (ranDomC == 'Cyan'){
+            document.getElementById('goiy').value = 'xanh nhạt';
+        }
+    // các đối tượng hình vuông.
+    }
+    let squaree = new Squaree(40,Math.random()*600, Math.random()*600,);
+    squaree.SquareOnTable();
+    changeColorr();
+    let squaree1 = new Squaree(40,Math.random()*600, Math.random()*600);
+    squaree1.SquareOnTable();
+    let squaree2 = new Squaree(40,Math.random()*600, Math.random()*600);
+    squaree2.SquareOnTable();
+    let squaree3 = new Squaree(40,Math.random()*600, Math.random()*600);
+    squaree3.SquareOnTable();
+    let squaree4= new Squaree(40,Math.random()*600, Math.random()*600);
+    squaree4 .SquareOnTable();
+    let squaree5 = new Squaree(40,Math.random()*600, Math.random()*600);
+    squaree5.SquareOnTable();
+    let squaree6 = new Squaree(40,Math.random()*600, Math.random()*600);
+    squaree6.SquareOnTable();
+
+
+    //switch Space = begin
+
+    function playgame(){
+        timeID =setInterval(automove,5);
+        return timeID;
+    }
+    //resetGame
+    function  reset1() {
+        window.location.reload();
+
+    }
+</script>
+</html>
