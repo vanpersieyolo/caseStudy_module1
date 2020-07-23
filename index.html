@@ -11,8 +11,8 @@
         <h1><center>LOOKING FOR LOVER !</center></h1>
         <tr >
             <td id="canvasne">
-                    <canvas id="myCanvas" width="950px" height="768px" style=" border:10px solid pink"></canvas>
-                </td>
+                <canvas id="myCanvas" width="950px" height="768px" style=" border:10px solid pink"></canvas>
+            </td>
             <td>
                 <form id='crushID'></form>
                 <h2>bấm<button class="button" onclick="playgame()">Space</button>để bắt đầu</h2>
@@ -34,7 +34,7 @@
     let timeID = 0;
     var diemso = 0;
     var countSpace = 0;
-    function CircleHead(pos1,pos2,rad) { //class circle
+    let CircleHead = function(pos1,pos2,rad) { //class circle
 
         this.pos1 = pos1;//ngang
         this.pos2 = pos2;//dọc
@@ -54,7 +54,7 @@
             ctx.closePath();
         }
 
-        this.moveSnake = function (item) {     //method move
+        this.moveSnake = function (item) {     //method move circle
             this.pos1 = this.pos1 + this.dx;
             this.pos2 = this.pos2 + this.dy;
             if (this.pos1-this.rad <= 0 || this.pos2-this.rad <= 0 || this.pos1 +this.rad >=950 || this.pos2 + this.rad >=768){
@@ -63,10 +63,10 @@
 
             }
             if(this.accident(item)){
-                    document.getElementById('anhcrush').innerHTML = '<img src="ngoctrinh'+ Math.floor(Math.random()*5)+ '.png" height="872" width="600"/>';
+                document.getElementById('anhcrush').innerHTML = '<img src="ngoctrinh'+ Math.floor(Math.random()*5)+ '.png" height="872" width="600"/>';
             }
         }
-        this.accident = function (item) { //phương thức va chạm  ---- item là giá trị truyền vào
+        this.accident = function (item) { //phương thức va chạm  ---- item là giá trị truyền vào ( square.x)
             let x = item.toaDo1 + 20;
             let y = item.toaDo2 + 20;
             if (Math.abs(this.pos1- x) < 1/2*(this.rad+50) && Math.abs(this.pos2 - y) < 1/2*(this.rad+50)){
@@ -134,17 +134,17 @@
 
     circlehead.printfCircle();
     function automove() {
-           circlehead.printfCircle();            // di chuyển hình tròn
-           circlehead.moveSnake(squaree);
-           squaree.SquareOnTable();
-           squaree1.SquareOnTable();
-           squaree2.SquareOnTable();
-           squaree3.SquareOnTable();
-           squaree4.SquareOnTable();
-           squaree5.SquareOnTable();
-           squaree6.SquareOnTable();
-           document.getElementById('score').value = diemso;
-   }
+        circlehead.printfCircle();            // di chuyển hình tròn
+        circlehead.moveSnake(squaree);
+        squaree.SquareOnTable();
+        squaree1.SquareOnTable();
+        squaree2.SquareOnTable();
+        squaree3.SquareOnTable();
+        squaree4.SquareOnTable();
+        squaree5.SquareOnTable();
+        squaree6.SquareOnTable();
+        document.getElementById('score').value = diemso;
+    }
 
     // di chuyển theo hướng
     function moveleftCircle(){
@@ -169,7 +169,7 @@
     }
 
     var ranDomC ='';
-    function Squaree(canhA,toado1,toado2) {             // class hình vuông
+    let  Squaree =  function (canhA,toado1,toado2) {             // class square
         this.CanhA = canhA;
         this.toaDo1 = toado1;
         this.toaDo2 = toado2;
@@ -197,13 +197,14 @@
             this.randomPosi = function () {
                 this.toaDo1 = Math.random() * 600;
                 this.toaDo2 = Math.random() * 600;
-                this.color = colorArr[Math.floor(Math.random() * 6)];
+                this.color = colorArr[Math.floor(Math.random() * 7)];
                 ranDomC = this.color;
 
             }
         }
     }
-    function changeColorr(){        // hàm đổi màu
+    // function checkin crush's color
+    function changeColorr(){
         if (ranDomC == 'red'){
             document.getElementById('goiy').value = 'ĐỎ';
         }
@@ -225,8 +226,9 @@
         if (ranDomC == 'Cyan'){
             document.getElementById('goiy').value = 'xanh nhạt';
         }
-    // các đối tượng hình vuông.
+
     }
+    // obj Square
     let squaree = new Squaree(40,Math.random()*600, Math.random()*600,);
     squaree.SquareOnTable();
     changeColorr();
@@ -244,13 +246,12 @@
     squaree6.SquareOnTable();
 
 
-    //switch Space = begin
-
+    //switch Space to do begin
     function playgame(){
         timeID =setInterval(automove,5);
         return timeID;
     }
-    //resetGame
+    //Switch Ctrl to do reset Game
     function  reset1() {
         window.location.reload();
 
