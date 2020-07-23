@@ -21,6 +21,11 @@
                 <input type="text" class="khungchu" value="" disabled id="goiy" >
                 <h1>Score:</h1>
                 <input class="khung" type="text" disabled id="score" /><br>
+                <form >
+                    <input type="text" class="clock" value="00" >
+                    <input type="text" class="clock" value="00" >
+                    <input type="text" class="clock"  id="countdown" >
+                </form>
             </td>
 
 
@@ -31,7 +36,8 @@
 
 </body>
 <script>
-    let timeID = 0;
+    var cdtime = 0;
+    var timeID = 0;
     var diemso = 0;
     var countSpace = 0;
     let CircleHead = function(pos1,pos2,rad) { //class circle
@@ -57,9 +63,10 @@
         this.moveSnake = function (item) {     //method move circle
             this.pos1 = this.pos1 + this.dx;
             this.pos2 = this.pos2 + this.dy;
-            if (this.pos1-this.rad <= 0 || this.pos2-this.rad <= 0 || this.pos1 +this.rad >=950 || this.pos2 + this.rad >=768){
+            if (this.pos1-this.rad <= 0 || this.pos2-this.rad <= 0 || this.pos1 +this.rad >=950 || this.pos2 + this.rad >=768 || clock.secondss == 0){
                 document.getElementById('anhcrush').innerHTML ="<h1>Thua rồi nhé :D </h1><br><h1>Crush của bạn nè:   </h1>"+"<img src=\"tranducboo.png\" height=\"750\" width=\"600\"/><br><h4>giới thiệu nhân vật trong ảnh:</h4><br><h4>TRẦN ĐỨC BO</h4><br><h4>GIỚI TÍNH: Pê đe</h4><br><h4>GOOGLE SEARCH ĐỂ LẤY INFOR</h4>";
                 clearInterval(timeID);
+                clearInterval(cdtime);
 
             }
             if(this.accident(item)){
@@ -246,11 +253,34 @@
     squaree6.SquareOnTable();
 
 
+
+
+    let Clock = function (time) {
+        this.secondss = time;
+
+        this.pushTime = function () {
+            document.getElementById('countdown').value = time;
+        }
+
+        this.countDown  = function () {
+            this.secondss -= 1;
+            document.getElementById('countdown').value = this.secondss;
+        }
+
+    }
+    let clock = new Clock(59);
+    clock.pushTime();
+
+
     //switch Space to do begin
     function playgame(){
         timeID =setInterval(automove,5);
-        return timeID;
+        cdtime = setInterval(function () {
+            clock.countDown();
+        },1000)
     }
+
+
     //Switch Ctrl to do reset Game
     function  reset1() {
         window.location.reload();
